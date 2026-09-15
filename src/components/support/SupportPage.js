@@ -4,56 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { kits } from "@/data/kits";
 
 const donationAmounts = [20000, 50000, 100000];
-
-const kits = [
-    {
-        id: "kit-1",
-        number: "01",
-        name: "Kit Raíz",
-        price: 150000,
-        description: "Una forma de llevar contigo parte de nuestra identidad.",
-        items: [
-            "Camiseta",
-            "Tula",
-            "Termo",
-            "3 pelotas",
-            "Postal de agradecimiento",
-        ],
-        color: "#B2CC0F",
-    },
-    {
-        id: "kit-2",
-        number: "02",
-        name: "Kit Movimiento",
-        price: 250000,
-        description: "Un kit pensado para quienes quieren llevar el movimiento más lejos.",
-        items: [
-            "Camiseta",
-            "Tula",
-            "Termo",
-            "2 hula hulas",
-            "Postal de agradecimiento",
-        ],
-        color: "#A95AA7",
-    },
-    {
-        id: "kit-3",
-        number: "03",
-        name: "Kit Circo",
-        price: 300000,
-        description: "Una experiencia completa para quienes hacen parte de esta raíz.",
-        items: [
-            "Camiseta",
-            "Tula",
-            "Termo",
-            "3 clavas",
-            "Postal de agradecimiento",
-        ],
-        color: "#F2871D",
-    },
-];
 
 function formatPrice(value) {
     return new Intl.NumberFormat("es-CO", {
@@ -68,6 +21,44 @@ export default function SupportPage() {
     const [donationType, setDonationType] = useState("person");
     const [amount, setAmount] = useState(null);
     const [customAmount, setCustomAmount] = useState("");
+    const [loadingKit, setLoadingKit] = useState(null);
+    const [error, setError] = useState("");
+
+    async function handleKitCheckout(kitId) {
+        try {
+            setLoadingKit(kitId);
+            setError("");
+
+            const response = await fetch("/api/wompi/checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    type: "kit",
+                    kitId,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.error || "No fue posible preparar el pago."
+                );
+            }
+
+            console.log("Checkout Wompi preparado:", data);
+
+            // Por ahora solo comprobamos la respuesta.
+            // En el siguiente paso conectaremos Wompi.
+        } catch (error) {
+            console.error("Error preparando checkout:", error);
+            setError(error.message);
+        } finally {
+            setLoadingKit(null);
+        }
+    }
 
     const selectedAmount =
         amount === "other"
@@ -155,8 +146,8 @@ export default function SupportPage() {
                         >
                             <div
                                 className={`flex h-12 w-12 items-center justify-center rounded-full ${supportType === "kit"
-                                        ? "bg-raiz-yellow text-raiz-black"
-                                        : "bg-raiz-purple text-white"
+                                    ? "bg-raiz-yellow text-raiz-black"
+                                    : "bg-raiz-purple text-white"
                                     }`}
                             >
                                 K
@@ -246,6 +237,7 @@ export default function SupportPage() {
                                                 al Régimen Tributario Especial pueden acceder a los
                                                 beneficios tributarios establecidos por la legislación
                                                 colombiana, de acuerdo con los requisitos aplicables.
+                                                <b>Recuerda Circo Raíz hace parte del Régimen Tributario Especial</b>
                                             </p>
                                         </div>
                                     )}
@@ -372,6 +364,12 @@ export default function SupportPage() {
                                 </p>
                             </div>
 
+                            {error && (
+                                <div className="mb-6 rounded-2xl bg-raiz-red/10 p-4 text-sm text-raiz-red">
+                                    {error}
+                                </div>
+                            )}
+
                             <div className="grid gap-6 lg:grid-cols-3">
                                 {kits.map((kit) => (
                                     <article
@@ -433,10 +431,12 @@ export default function SupportPage() {
 
                                             <button
                                                 type="button"
-                                                className="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-raiz-black px-6 py-3 font-semibold text-white transition-transform hover:-translate-y-1"
+                                                onClick={() => handleKitCheckout(kit.id)}
+                                                disabled={loadingKit === kit.id}
+                                                className="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-raiz-black px-6 py-3 font-semibold text-white transition-transform hover:-translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             >
-                                                Elegir este kit
-                                                <ArrowRight size={17} />
+                                                {loadingKit === kit.id ? "Preparando..." : "Elegir este kit"}
+                                                {loadingKit !== kit.id && <ArrowRight size={17} />}
                                             </button>
                                         </div>
                                     </article>
