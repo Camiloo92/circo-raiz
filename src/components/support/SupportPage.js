@@ -25,40 +25,76 @@ export default function SupportPage() {
     const [error, setError] = useState("");
 
     async function handleKitCheckout(kitId) {
-        try {
-            setLoadingKit(kitId);
-            setError("");
+    try {
+        setLoadingKit(kitId);
+        setError("");
 
-            const response = await fetch("/api/wompi/checkout", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    type: "kit",
-                    kitId,
-                }),
-            });
+        const response = await fetch("/api/wompi/checkout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                type: "kit",
+                kitId,
+            }),
+        });
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(
-                    data.error || "No fue posible preparar el pago."
-                );
-            }
-
-            console.log("Checkout Wompi preparado:", data);
-
-            // Por ahora solo comprobamos la respuesta.
-            // En el siguiente paso conectaremos Wompi.
-        } catch (error) {
-            console.error("Error preparando checkout:", error);
-            setError(error.message);
-        } finally {
-            setLoadingKit(null);
+        if (!response.ok) {
+            throw new Error(
+                data.error || "No fue posible preparar el pago."
+            );
         }
+
+        if (
+            !data.publicKey ||
+            !data.reference ||
+            !data.amountInCents ||
+            !data.signature
+        ) {
+            throw new Error(
+                "La información necesaria para iniciar el pago está incompleta."
+            );
+        }
+
+        const form = document.createElement("form");
+
+        form.method = "GET";
+        form.action = "https://checkout.wompi.co/p/";
+        form.style.display = "none";
+
+        const fields = {
+            "public-key": data.publicKey,
+            currency: data.currency,
+            "amount-in-cents": data.amountInCents,
+            reference: data.reference,
+            "signature:integrity": data.signature,
+        };
+
+        Object.entries(fields).forEach(([name, value]) => {
+            const input = document.createElement("input");
+
+            input.type = "hidden";
+            input.name = name;
+            input.value = value;
+
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    } catch (error) {
+        console.error("Error iniciando checkout Wompi:", error);
+
+        setError(
+            error.message || "No fue posible iniciar el proceso de pago."
+        );
+
+        setLoadingKit(null);
     }
+}
 
     const selectedAmount =
         amount === "other"
