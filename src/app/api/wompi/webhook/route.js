@@ -84,7 +84,7 @@ export async function POST(request) {
       id: transaction?.id,
       status: transaction?.status,
       reference: transaction?.reference,
-      amountInCents: transaction?.amountInCents,
+      amountInCents: transaction.amount_in_cents,
       currency: transaction?.currency,
     });
 

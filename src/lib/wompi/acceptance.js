@@ -2,16 +2,19 @@ import { wompiConfig } from "./config";
 
 export async function getAcceptanceTokens() {
   const response = await fetch(
-    `${wompiConfig.apiUrl}/merchants/${wompiConfig.publicKey}`,
+    `${wompiConfig.apiUrl}/merchants/info`,
     {
       method: "GET",
+      headers: {
+        "x-merchant-public-key": wompiConfig.publicKey,
+      },
       cache: "no-store",
     }
   );
 
   if (!response.ok) {
     throw new Error(
-      `No fue posible obtener la información de aceptación de Wompi.`
+      "No fue posible obtener la información de aceptación de Wompi."
     );
   }
 

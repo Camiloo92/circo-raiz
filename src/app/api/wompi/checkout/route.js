@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import { kits } from "@/data/kits";
 import { generateIntegritySignature } from "@/lib/wompi/signature";
-import { getAcceptanceTokens } from "@/lib/wompi/acceptance";
 
 export async function POST(request) {
     try {
@@ -73,7 +72,6 @@ export async function POST(request) {
             currency,
         });
 
-        const acceptanceTokens = await getAcceptanceTokens();
 
         return Response.json({
             reference,
