@@ -1,0 +1,95 @@
+// use prisma-8
+
+enum OrderType {
+  DONATION
+  KIT
+}
+
+enum OrderStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  ERROR
+  VOIDED
+}
+
+model Customer {
+  id        Int                 @id @default(autoincrement())
+  name      String
+  email     String              @unique
+  phone     String?
+  createdAt TimestamptzString   @default(now())
+  updatedAt temporal.updatedAtString()
+
+  orders Order[]
+}
+
+model Order {
+  id                 Int                 @id @default(autoincrement())
+  reference          String              @unique
+  type               OrderType
+  status             OrderStatus         @default(PENDING)
+  currency           String              @default("COP")
+  totalAmountInCents Int
+
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  items           OrderItem[]
+  payment         Payment?
+  shippingAddress ShippingAddress?
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+  
+  @@index([customerId, createdAt])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id                 Int    @id @default(autoincrement())
+  orderId            Int
+  kitId              String
+  quantity           Int
+  unitAmountInCents  Int
+  totalAmountInCents Int
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+}
+
+model Payment {
+  id                 Int    @id @default(autoincrement())
+  orderId            Int    @unique
+  wompiTransactionId String @unique
+  wompiEventId       String @unique
+  status             String
+  paymentMethod      String?
+  paidAmountInCents  Int?
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ShippingAddress {
+  id            Int    @id @default(autoincrement())
+  orderId       Int    @unique
+  recipientName String
+  phone         String
+  address       String
+  city          String
+  department    String
+  postalCode    String?
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "order-total-amount-check",
+    "label": "Add CHECK constraint to \"order.totalAmountInCents\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Add CHECK constraint to \"order.totalAmountInCents\"",
+        "sql": "\n            ALTER TABLE \"public\".\"order\"\n            ADD CONSTRAINT \"order_total_amount_non_negative\"\n            CHECK (\"totalAmountInCents\" >= 0)\n          "
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "order-item-quantity-check",
+    "label": "Add CHECK constraint to \"orderItem.quantity\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Add CHECK constraint to \"orderItem.quantity\"",
+        "sql": "\n            ALTER TABLE \"public\".\"orderItem\"\n            ADD CONSTRAINT \"order_item_quantity_positive\"\n            CHECK (\"quantity\" > 0)\n          "
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "order-item-unit-amount-check",
+    "label": "Add CHECK constraint to \"orderItem.unitAmountInCents\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Add CHECK constraint to \"orderItem.unitAmountInCents\"",
+        "sql": "\n            ALTER TABLE \"public\".\"orderItem\"\n            ADD CONSTRAINT \"order_item_unit_amount_non_negative\"\n            CHECK (\"unitAmountInCents\" >= 0)\n          "
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "order-item-total-amount-check",
+    "label": "Add CHECK constraint to \"orderItem.totalAmountInCents\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Add CHECK constraint to \"orderItem.totalAmountInCents\"",
+        "sql": "\n            ALTER TABLE \"public\".\"orderItem\"\n            ADD CONSTRAINT \"order_item_total_amount_non_negative\"\n            CHECK (\"totalAmountInCents\" >= 0)\n          "
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "payment-paid-amount-check",
+    "label": "Add CHECK constraint to \"payment.paidAmountInCents\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Add CHECK constraint to \"payment.paidAmountInCents\"",
+        "sql": "\n            ALTER TABLE \"public\".\"payment\"\n            ADD CONSTRAINT \"payment_paid_amount_non_negative\"\n            CHECK (\"paidAmountInCents\" >= 0)\n          "
+      }
+    ],
+    "postcheck": []
+  }
+]
