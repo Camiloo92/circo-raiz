@@ -1,5 +1,4 @@
 // use prisma-8
-
 enum OrderType {
   DONATION
   KIT
@@ -14,37 +13,39 @@ enum OrderStatus {
 }
 
 model Customer {
-  id        Int                 @id @default(autoincrement())
+  id        Int                        @id @default(autoincrement())
   name      String
-  email     String              @unique
+  email     String                     @unique
   phone     String?
-  createdAt TimestamptzString   @default(now())
+  createdAt TimestamptzString          @default(now())
   updatedAt temporal.updatedAtString()
 
-  orders Order[]
+  orders    Order[]
 }
 
 model Order {
-  id                 Int                 @id @default(autoincrement())
-  reference          String              @unique
+  id                 Int                        @id @default(autoincrement())
+  reference          String                     @unique
   type               OrderType
-  status             OrderStatus         @default(PENDING)
-  currency           String              @default("COP")
+  status             OrderStatus                @default(PENDING)
+  currency           String                     @default("COP")
   totalAmountInCents Int
 
-  customerId Int
-  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId         Int
+  customer           Customer                   @relation(fields:[customerId], references:[id])
 
-  items           OrderItem[]
-  payment         Payment?
-  shippingAddress ShippingAddress?
+  items              OrderItem[]
+  payment            Payment?
+  shippingAddress    ShippingAddress?
 
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
-  
+  createdAt          TimestamptzString          @default(now())
+  updatedAt          temporal.updatedAtString()
+
   @@index([customerId, createdAt])
   @@index([status])
   @@index([createdAt])
+
+  @@check(expression: "totalAmountInCents >= 0", name: "order_total_amount_non_negative")
 }
 
 model OrderItem {
@@ -55,32 +56,40 @@ model OrderItem {
   unitAmountInCents  Int
   totalAmountInCents Int
 
-  order Order @relation(fields: [orderId], references: [id])
+  order              Order  @relation(fields:[orderId], references:[id])
 
   @@index([orderId])
+
+  @@check(expression: "quantity > 0", name: "order_item_quantity_positive")
+
+  @@check(expression: "unitAmountInCents >= 0", name: "order_item_unit_amount_non_negative")
+
+  @@check(expression: "totalAmountInCents >= 0", name: "order_item_total_amount_non_negative")
 }
 
 model Payment {
-  id                 Int    @id @default(autoincrement())
-  orderId            Int    @unique
-  wompiTransactionId String @unique
-  wompiEventId       String @unique
+  id                 Int                        @id @default(autoincrement())
+  orderId            Int                        @unique
+  wompiTransactionId String                     @unique
+  wompiEventId       String                     @unique
   status             String
   paymentMethod      String?
   paidAmountInCents  Int?
 
-  order Order @relation(fields: [orderId], references: [id])
+  order              Order                      @relation(fields:[orderId], references:[id])
 
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+  createdAt          TimestamptzString          @default(now())
+  updatedAt          temporal.updatedAtString()
 
   @@index([status])
   @@index([createdAt])
+
+  @@check(expression: "paidAmountInCents >= 0", name: "payment_paid_amount_non_negative")
 }
 
 model ShippingAddress {
-  id            Int    @id @default(autoincrement())
-  orderId       Int    @unique
+  id            Int                        @id @default(autoincrement())
+  orderId       Int                        @unique
   recipientName String
   phone         String
   address       String
@@ -88,8 +97,8 @@ model ShippingAddress {
   department    String
   postalCode    String?
 
-  order Order @relation(fields: [orderId], references: [id])
+  order         Order                      @relation(fields:[orderId], references:[id])
 
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+  createdAt     TimestamptzString          @default(now())
+  updatedAt     temporal.updatedAtString()
 }

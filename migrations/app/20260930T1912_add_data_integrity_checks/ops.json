@@ -1,0 +1,212 @@
+[
+  {
+    "id": "checkConstraint.order.order_total_amount_non_negative_183a12ef",
+    "label": "Add check constraint \"order_total_amount_non_negative_183a12ef\" on \"order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "order_total_amount_non_negative_183a12ef",
+        "table": "order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"order_total_amount_non_negative_183a12ef\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_total_amount_non_negative_183a12ef",
+          "public",
+          "\"public\".\"order\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"order_total_amount_non_negative_183a12ef\"",
+        "sql": "ALTER TABLE \"public\".\"order\" ADD CONSTRAINT \"order_total_amount_non_negative_183a12ef\" CHECK (\"totalAmountInCents\" >= 0)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"order_total_amount_non_negative_183a12ef\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_total_amount_non_negative_183a12ef",
+          "public",
+          "\"public\".\"order\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.orderItem.order_item_quantity_positive_4402679f",
+    "label": "Add check constraint \"order_item_quantity_positive_4402679f\" on \"orderItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "order_item_quantity_positive_4402679f",
+        "table": "orderItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"order_item_quantity_positive_4402679f\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_item_quantity_positive_4402679f",
+          "public",
+          "\"public\".\"orderItem\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"order_item_quantity_positive_4402679f\"",
+        "sql": "ALTER TABLE \"public\".\"orderItem\" ADD CONSTRAINT \"order_item_quantity_positive_4402679f\" CHECK (quantity > 0)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"order_item_quantity_positive_4402679f\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_item_quantity_positive_4402679f",
+          "public",
+          "\"public\".\"orderItem\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.orderItem.order_item_total_amount_non_negative_183a12ef",
+    "label": "Add check constraint \"order_item_total_amount_non_negative_183a12ef\" on \"orderItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "order_item_total_amount_non_negative_183a12ef",
+        "table": "orderItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"order_item_total_amount_non_negative_183a12ef\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_item_total_amount_non_negative_183a12ef",
+          "public",
+          "\"public\".\"orderItem\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"order_item_total_amount_non_negative_183a12ef\"",
+        "sql": "ALTER TABLE \"public\".\"orderItem\" ADD CONSTRAINT \"order_item_total_amount_non_negative_183a12ef\" CHECK (\"totalAmountInCents\" >= 0)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"order_item_total_amount_non_negative_183a12ef\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_item_total_amount_non_negative_183a12ef",
+          "public",
+          "\"public\".\"orderItem\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.orderItem.order_item_unit_amount_non_negative_cea11669",
+    "label": "Add check constraint \"order_item_unit_amount_non_negative_cea11669\" on \"orderItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "order_item_unit_amount_non_negative_cea11669",
+        "table": "orderItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"order_item_unit_amount_non_negative_cea11669\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_item_unit_amount_non_negative_cea11669",
+          "public",
+          "\"public\".\"orderItem\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"order_item_unit_amount_non_negative_cea11669\"",
+        "sql": "ALTER TABLE \"public\".\"orderItem\" ADD CONSTRAINT \"order_item_unit_amount_non_negative_cea11669\" CHECK (\"unitAmountInCents\" >= 0)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"order_item_unit_amount_non_negative_cea11669\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "order_item_unit_amount_non_negative_cea11669",
+          "public",
+          "\"public\".\"orderItem\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.payment.payment_paid_amount_non_negative_6ed48a4d",
+    "label": "Add check constraint \"payment_paid_amount_non_negative_6ed48a4d\" on \"payment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "payment_paid_amount_non_negative_6ed48a4d",
+        "table": "payment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"payment_paid_amount_non_negative_6ed48a4d\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "payment_paid_amount_non_negative_6ed48a4d",
+          "public",
+          "\"public\".\"payment\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"payment_paid_amount_non_negative_6ed48a4d\"",
+        "sql": "ALTER TABLE \"public\".\"payment\" ADD CONSTRAINT \"payment_paid_amount_non_negative_6ed48a4d\" CHECK (\"paidAmountInCents\" >= 0)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"payment_paid_amount_non_negative_6ed48a4d\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "payment_paid_amount_non_negative_6ed48a4d",
+          "public",
+          "\"public\".\"payment\""
+        ]
+      }
+    ]
+  }
+]

@@ -740,6 +740,11 @@
                   "prefix": "order_status_check"
                 },
                 {
+                  "expression": "totalAmountInCents >= 0",
+                  "name": "order_total_amount_non_negative_183a12ef",
+                  "prefix": "order_total_amount_non_negative"
+                },
+                {
                   "expression": "\"type\" IN ('DONATION', 'KIT')",
                   "name": "order_type_check_37082f54",
                   "prefix": "order_type_check"
@@ -887,6 +892,23 @@
               ]
             },
             "orderItem": {
+              "checks": [
+                {
+                  "expression": "quantity > 0",
+                  "name": "order_item_quantity_positive_4402679f",
+                  "prefix": "order_item_quantity_positive"
+                },
+                {
+                  "expression": "totalAmountInCents >= 0",
+                  "name": "order_item_total_amount_non_negative_183a12ef",
+                  "prefix": "order_item_total_amount_non_negative"
+                },
+                {
+                  "expression": "unitAmountInCents >= 0",
+                  "name": "order_item_unit_amount_non_negative_cea11669",
+                  "prefix": "order_item_unit_amount_non_negative"
+                }
+              ],
               "columns": {
                 "id": {
                   "codecId": "pg/int4@1",
@@ -959,6 +981,13 @@
               "uniques": []
             },
             "payment": {
+              "checks": [
+                {
+                  "expression": "paidAmountInCents >= 0",
+                  "name": "payment_paid_amount_non_negative_6ed48a4d",
+                  "prefix": "payment_paid_amount_non_negative"
+                }
+              ],
               "columns": {
                 "createdAt": {
                   "codecId": "pg/timestamptz-string@1",
@@ -1191,7 +1220,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "c35ea8a5f527fdd38c07b3511bb44eab1d38299656ff215d84bbab119260d191"
+    "storageHash": "02eb82f8f12c8892a3e1d0cab7f5add90060e02a32b28fea2835a3347b2b46c8"
   },
   "execution": {
     "executionHash": "0d4c442943ce98e2d8a0122210169a6596b1c3276e2a90f045139d753df96a60",
